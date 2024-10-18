@@ -33,7 +33,7 @@ const clientHeaders = {
 const SearchBar = ({ setLoading }) => {
 
   // State variables for managing user input and API responses
-  const [flightType, setFlightType] = useState('go-return'); // Type of flight (round trip or one-way)
+  const [flightType, setFlightType] = useState('round-trip'); // Type of flight (round trip or one-way)
   const [cabinClass, setCabinClass] = useState('economy'); // Class of travel
   const [startDate, setStartDate] = useState(null); // Start date for flights
   const [endDate, setEndDate] = useState(null); // Return date for flights
@@ -314,8 +314,8 @@ const SearchBar = ({ setLoading }) => {
 
   // Flight type options
   const flightTypes = {
-    'go-return': 'Go & return',
-    'go': 'Simple Departure',
+    'round-trip': 'Round Trip',
+    'one-way': 'One Way',
   };
 
   // Titles for passenger types
@@ -377,8 +377,8 @@ const SearchBar = ({ setLoading }) => {
                   },
                 }}
               >
-                <MenuItem value={'go-return'}>{flightTypes['go-return']}</MenuItem>
-                <MenuItem value={'go'}>{flightTypes['go']}</MenuItem>
+                <MenuItem value={'round-trip'}>{flightTypes['round-trip']}</MenuItem>
+                <MenuItem value={'one-way'}>{flightTypes['one-way']}</MenuItem>
               </Select>
             </FormControl>
 
@@ -442,11 +442,16 @@ const SearchBar = ({ setLoading }) => {
                       >
                         <Typography>{passengerTypes[type]}</Typography>
                         <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                          <IconButton onMouseDown={(e) => e.stopPropagation()} onClick={() => handlePassengerChange(type, -1)} disabled={getPassengersCount(type) === 0}>
+                          <IconButton sx={{
+                    pointerEvents: 'auto',
+                  }} onMouseDown={(e) => e.stopPropagation()} onClick={() => handlePassengerChange(type, -1)} 
+                          disabled={getPassengersCount(type) === 0}>
                             <RemoveIcon />
                           </IconButton>
                           <Typography>{getPassengersCount(type)}</Typography>
-                          <IconButton onMouseDown={(e) => e.stopPropagation()} onClick={() => handlePassengerChange(type, 1)}>
+                          <IconButton sx={{
+                    pointerEvents: 'auto',
+                  }} onMouseDown={(e) => e.stopPropagation()} onClick={() => handlePassengerChange(type, 1)}>
                             <AddIcon />
                           </IconButton>
                         </Box>
@@ -466,10 +471,14 @@ const SearchBar = ({ setLoading }) => {
                       justifyContent: 'flex-end',
                       gap: 1,
                     }}>
-                      <Button variant="outlined" color="primary" onClick={handleClose} onMouseDown={(e) => e.stopPropagation()}>
+                      <Button sx={{
+                    pointerEvents: 'auto',
+                  }} variant="outlined" color="primary" onClick={handleClose} onMouseDown={(e) => e.stopPropagation()}>
                         OK
                       </Button>
-                      <Button variant="outlined" color="primary" onClick={handleCancel} onMouseDown={(e) => e.stopPropagation()}>
+                      <Button sx={{
+                    pointerEvents: 'auto',
+                  }} variant="outlined" color="primary" onClick={handleCancel} onMouseDown={(e) => e.stopPropagation()}>
                         Cancel
                       </Button>
                     </Box>
@@ -627,7 +636,7 @@ const SearchBar = ({ setLoading }) => {
                 />
               </LocalizationProvider>
               {/* Return Date Picker (if applicable) */}
-              {flightType === 'go-return' && (
+              {flightType === 'round-trip' && (
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                   <DatePicker
                     label="Return"
@@ -661,8 +670,8 @@ const SearchBar = ({ setLoading }) => {
               alignItems: 'center',
               mt: 2,
               boxShadow: '0 4px 4px rgba(0, 0, 0, 0.2)',
-              pointerEvents: !Boolean(startAirportDetails.skyId && endAirportDetails.skyId && startDate && endDate && cabinClass && passengers.adults > 0) || ongoing ? 'none' : 'auto',
-              backgroundColor: !Boolean(startAirportDetails.skyId && endAirportDetails.skyId && startDate && endDate && cabinClass && passengers.adults > 0) || ongoing ? '#74bee6' : 'primary'
+              pointerEvents: !Boolean(startAirportDetails.skyId && endAirportDetails.skyId && startDate  && cabinClass && passengers.adults > 0) || ongoing ? 'none' : 'auto',
+              backgroundColor: !Boolean(startAirportDetails.skyId && endAirportDetails.skyId && startDate  && cabinClass && passengers.adults > 0) || ongoing ? '#74bee6' : 'primary'
             }}
             onClick={searchFlights}
           >
@@ -684,7 +693,7 @@ const SearchBar = ({ setLoading }) => {
                   marginBottom: '10px'
                 }}
               >
-                {`${flights.length}` + (flights.length === 1 ? 'itinerary' : 'itineraries')}
+                {`${flights.length}` + (flights.length === 1 ? ' itinerary' : ' itineraries')}
               </Typography>
             </Box>
             <FlightList data={flights} />
